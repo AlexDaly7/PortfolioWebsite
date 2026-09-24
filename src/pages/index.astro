@@ -1,0 +1,52 @@
+---
+
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<style>
+			#mainMenu {
+				display:flex;
+			}
+
+			#mainFiller {
+				width:100vw;
+				height:10rem;
+			}
+			
+			#mainList {
+				list-style:none;
+				width:10vw;
+				display:inline-block;
+			}
+
+			#mainList > li {
+				text-align: left;
+				text-underline-offset: 3px;
+				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
+				display:block;
+			}
+
+			#mainList > li:hover {
+				transform:translate(-50%);
+			}
+
+			#mainList > li > a {
+				font-size:10rem;
+				font-variant: small-caps;
+				color:black;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<div id="mainMenu">
+				<div id="mainFiller"></div>
+				<ul id="mainList">
+					<li><a href="blog">Blog</a></li>
+				</ul>
+			</div>
+		</main>
+	</body>
+</html>

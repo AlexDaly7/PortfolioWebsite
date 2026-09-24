@@ -1,26 +1,24 @@
 {
-  "name": "PortfolioWebsite",
+  "name": "portfoliowebsite",
   "type": "module",
-  "private": true,
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@nuxt/content": "^3.16.0",
-    "dotenv": "^18.0.1",
-    "drizzle-orm": "^1.0.0-rc.4",
-    "marked": "^18.0.13",
-    "nuxt": "^4.5.2",
-    "vue": "^3.5.42",
-    "vue-router": "^5.3.1",
-    "zod": "^4.6.5"
+    "@astrojs/mdx": "^8.0.2",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.4",
+    "sharp": "^0.35.0"
   },
-  "devDependencies": {
-    "@types/bun": "^1.4.2",
-    "drizzle-kit": "^1.0.0-rc.4"
+  "allowScripts": {
+    "esbuild": true
   }
 }
