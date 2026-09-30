@@ -1,17 +1,156 @@
 ---
+import { Font } from "astro:assets";
 
+let pageWidth = 1280;
+let calcWidth = 1100 / pageWidth;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<style>
+		<Font cssVariable="--font-Fraunces" preload />
+		<Font cssVariable="--font-OpenSans" preload />
+		<Font cssVariable="--font-Recursive" preload />
+		<Font cssVariable="--font-Roboto" preload />
+		<script>
+			import type { mainMenuItem } from '../types';
+
+			const menuItems: mainMenuItem[] = new Array();
+
+			const mainListItems = document.getElementsByClassName("mainListItem") as HTMLCollectionOf<HTMLElement>;
+			const mainListLink = document.getElementsByClassName("mainListLink") as HTMLCollectionOf<HTMLElement>;
+			// ["Sans", "Algerian", "Garamond", "Papyrus"]
+			const fonts = ["var(--font-Fraunces)", "var(--font-OpenSans)", "var(--font-Recursive)", "var(--font-Roboto)"]
+
+
+			// Read each letter from the menu items and add it back to the list item as its own element, allowing them to be moved.
+			for(var i=0;i<mainListLink.length;i++) {
+				let item: mainMenuItem = {
+					id: i,
+					element: mainListItems[i],
+					fontArr: new Array(),
+					characters: new Array(),
+					timeoutEnter: new Array(),
+					timeoutLeave: new Array(),
+					slug: mainListLink[i].getAttribute("href")?.toString()
+				}
+
+				var characters = mainListLink[i].textContent.split("");
+				mainListLink[i].textContent = "";
+				for(var j=0;j<characters.length;j++) {
+					const content = document.createTextNode(characters[j]);
+					const element = document.createElement("span");
+					element.classList.add("mainListChar");
+					element.appendChild(content);
+					element.style.transition="0.2s all";
+					element.style.display="inline-block";
+					item.fontArr[j] = j;
+
+					item.characters.push(element);
+					mainListLink[i].append(element);
+				}
+				menuItems.push(item);
+				createFrame(item);
+			}
+
+			for(let i=0;i<menuItems.length;i++) {
+				let item = menuItems[i];
+				item.element.addEventListener("mouseenter", () => {
+					clearTimeouts(item);
+					showFrame(item);
+
+					item.fontInterval = setInterval(() => {
+						changeFont(item);
+					}, 100);
+					
+					for(let j=0;j<item.characters.length;j++) {
+						if(item.timeoutEnter==undefined) return;
+
+						item.timeoutEnter[j] = setTimeout(() => {
+							item.characters[j].style.transform="translate(-35rem)";
+						}, j*100);
+					}
+				});
+				item.element.addEventListener("mouseleave", () => {
+					clearTimeouts(item);
+					removeFrame(item);
+
+					for(let j=item.characters.length-1;j>=0;j--) {
+						if(item.timeoutLeave==undefined) return;
+
+						item.timeoutLeave[j] = setTimeout(() => {
+							resetChar(item.characters[j]);
+						}, (item.characters.length-j)*105);
+					}
+				});
+			}
+			
+			function changeFont(item: mainMenuItem) {
+				for(let i=0;i<item.characters.length;i++) {
+					// Generate a random number with 1.7x the range of the fonts array. If it is over return the function
+					// This gives the font a chance not to change every tick of this function.
+					let random = Math.floor(Math.random()*(fonts.length*1.7));
+					if(random>=fonts.length) return; 
+
+					item.characters[i].style.fontFamily=fonts[random].toString();
+				}
+			}
+
+			function resetChar(char: HTMLElement) {
+				char.style.fontFamily = "Times New Roman";
+				char.style.transform = "translate(0rem)";
+			}
+
+			function clearTimeouts(item: mainMenuItem) {
+				item.timeoutEnter?.forEach(id => clearTimeout(id));
+				item.timeoutEnter = new Array();
+
+				item.timeoutLeave?.forEach(id => clearTimeout(id));
+				item.timeoutLeave = new Array();
+
+				clearTimeout(item.timeoutVisible);
+				
+				clearInterval(item.fontInterval);
+			}
+
+			function showFrame(item: mainMenuItem) {
+				if(item.iframe==undefined) {
+					createFrame(item);
+				} else {
+					item.iframe.classList.add("is-visible");
+				}
+			}
+
+			function removeFrame(item: mainMenuItem) {
+				if(item.iframe!=undefined) {
+					item.iframe.classList.remove("is-visible");
+				}
+			}
+
+			function createFrame(item: mainMenuItem) {
+				let frame = document.createElement("iframe");
+				frame.style.border = "";
+				frame.classList.add("mainFrame");
+				frame.allowFullscreen = true;
+
+				if(item.slug!=undefined) frame.src = item.slug;
+				item.iframe = frame;
+				item.element.appendChild(frame);
+			}
+		
+		</script>
+		<style define:vars={{pageWidth, calcWidth}}>
+			body {
+				position:relative;
+				margin:0;
+			}
+
 			#mainMenu {
 				display:flex;
 			}
 
 			#mainFiller {
-				width:100vw;
+				width:30vw;
 				height:10rem;
 			}
 			
@@ -19,23 +158,47 @@
 				list-style:none;
 				width:10vw;
 				display:inline-block;
+				border:1px solid black;
+				width:60rem;
 			}
 
-			#mainList > li {
-				text-align: left;
+			.mainListItem {
+				text-align: right;
 				text-underline-offset: 3px;
 				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
 				display:block;
+				
+				height:180px;
 			}
 
-			#mainList > li:hover {
-				transform:translate(-50%);
-			}
-
-			#mainList > li > a {
+			.mainListLink {
+				font-family:"Times New Roman";
 				font-size:10rem;
 				font-variant: small-caps;
 				color:black;
+				z-index:10;
+			}
+
+			:global(.mainFrame) {
+				display:inline-block;
+				position:absolute;
+				right:1rem;
+				transition:0.2s all;
+				transform:scale(0.1);
+				opacity:0;
+				z-index:5;
+				width: 1280px;
+				height: 853px;
+				pointer-events:none;
+			}
+
+			:global(.mainFrame.is-visible) {
+				display:inline-block;
+				transition:1s all;
+				transform:scale(0.200);
+				transform-origin: top right;
+				opacity:1;
+				
 			}
 		</style>
 	</head>
@@ -44,7 +207,11 @@
 			<div id="mainMenu">
 				<div id="mainFiller"></div>
 				<ul id="mainList">
-					<li><a href="blog">Blog</a></li>
+					<li class="mainListItem"><a href="about" class="mainListLink">About</a></li>
+					<li class="mainListItem"><a href="blog" class="mainListLink">Blog</a></li>
+					<li class="mainListItem"><a href="contact" class="mainListLink">Contact</a></li>
+					<li class="mainListItem"><a href="reviews" class="mainListLink">Reviews</a></li>
+					
 				</ul>
 			</div>
 		</main>
