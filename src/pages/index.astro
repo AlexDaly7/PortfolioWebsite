@@ -1,8 +1,5 @@
 ---
 import { Font } from "astro:assets";
-
-let pageWidth = 1280;
-let calcWidth = 1100 / pageWidth;
 ---
 
 <!doctype html>
@@ -67,7 +64,7 @@ let calcWidth = 1100 / pageWidth;
 						if(item.timeoutEnter==undefined) return;
 
 						item.timeoutEnter[j] = setTimeout(() => {
-							item.characters[j].style.transform="translate(-35rem)";
+							item.characters[j].style.transform="translate(-25vw)";
 						}, j*100);
 					}
 				});
@@ -131,7 +128,6 @@ let calcWidth = 1100 / pageWidth;
 				let frame = document.createElement("iframe");
 				frame.style.border = "";
 				frame.classList.add("mainFrame");
-				frame.allowFullscreen = true;
 
 				if(item.slug!=undefined) frame.src = item.slug;
 				item.iframe = frame;
@@ -139,7 +135,7 @@ let calcWidth = 1100 / pageWidth;
 			}
 		
 		</script>
-		<style define:vars={{pageWidth, calcWidth}}>
+		<style>
 			body {
 				position:relative;
 				margin:0;
@@ -150,16 +146,23 @@ let calcWidth = 1100 / pageWidth;
 			}
 
 			#mainFiller {
-				width:30vw;
+				width:50vw;
 				height:10rem;
+			}
+
+			#mainFiller > h1 {
+				font-size: 8.5vw;
+				margin-left: 5vw;
+				border: black 4px ridge;
+				width:20vw;
+				text-align:center;
 			}
 			
 			#mainList {
 				list-style:none;
-				width:10vw;
 				display:inline-block;
 				border:1px solid black;
-				width:60rem;
+				width:50vw;
 			}
 
 			.mainListItem {
@@ -168,7 +171,7 @@ let calcWidth = 1100 / pageWidth;
 				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
 				display:block;
 				
-				height:180px;
+				height:160px;
 			}
 
 			.mainListLink {
@@ -183,33 +186,40 @@ let calcWidth = 1100 / pageWidth;
 				display:inline-block;
 				position:absolute;
 				right:1rem;
-				transition:0.2s all;
+				transition:0.5s all;
 				transform:scale(0.1);
 				opacity:0;
 				z-index:5;
 				width: 1280px;
-				height: 853px;
+				height: 900px;
 				pointer-events:none;
+				transform-origin: top right;
 			}
 
 			:global(.mainFrame.is-visible) {
 				display:inline-block;
-				transition:1s all;
+				position:absolute;
+				transition:1.5s all cubic-bezier(0.86, 0.34, 0.64, 0.93);
 				transform:scale(0.200);
 				transform-origin: top right;
 				opacity:1;
 				
 			}
+
 		</style>
 	</head>
 	<body>
 		<main>
 			<div id="mainMenu">
-				<div id="mainFiller"></div>
+				<div id="mainFiller">
+					<h1>Alex Daly</h1>
+				</div>
 				<ul id="mainList">
 					<li class="mainListItem"><a href="about" class="mainListLink">About</a></li>
 					<li class="mainListItem"><a href="blog" class="mainListLink">Blog</a></li>
 					<li class="mainListItem"><a href="contact" class="mainListLink">Contact</a></li>
+					<!--FIX BUG, projects will push its iframe under itself. -->
+					<li class="mainListItem"><a href="projects" class="mainListLink">Projects</a></li>
 					<li class="mainListItem"><a href="reviews" class="mainListLink">Reviews</a></li>
 					
 				</ul>
