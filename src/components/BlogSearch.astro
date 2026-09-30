@@ -1,68 +1,164 @@
 ---
-import { getCollection } from "astro:content";
-import { type CollectionEntry } from 'astro:content';
+    import { getCollection } from "astro:content";
 
-let posts = await getCollection("blog");
+    let posts = await getCollection("blog");
 
-let tagList = (await getCollection("blog")).map((post) => post.data.tags);
-let tags: string[] = new Array();
+    let tagList = (await getCollection("blog")).map((post) => post.data.tags);
+    let tags: string[] = new Array();
 
-// Search all posts for all tags
-tagList.forEach((postTags) => {
-    postTags.forEach((tag) => {
-        let tagExists = false;
+    // Search all posts for all tags
+    tagList.forEach((postTags) => {
+        postTags.forEach((tag) => {
+            let tagExists = false;
 
-        // If tags array is empty then push tag to tags as it cannot be a duplicate
-        if(tags.length==0) {
-            tags.push(tag);
-        }
-
-        // Check if it is present in the tags array (already parsed).
-        tags.forEach((parsedTag) => {
-            if(tag==parsedTag) {
-                tagExists = true;
+            // If tags array is empty then push tag to tags as it cannot be a duplicate
+            if(tags.length==0) {
+                tags.push(tag);
             }
-        });
-        // Push to tags array if tag has not already been parsed
-        if(!tagExists) {
-            tags.push(tag);
-        }
-    })
-});
 
-let results: CollectionEntry<"blog">[] = new Array();
-
-export function getResults(searchTags: string[]) {
-    results = [];
-    results = posts.sort((post) => {
-        let tagCheck: boolean[] = new Array();
-        searchTags.forEach((tag) => {
-            if(post.data.tags.)
-        });
-    })
-
-    return results;
-}
+            // Check if it is present in the tags array (already parsed).
+            tags.forEach((parsedTag) => {
+                if(tag==parsedTag) {
+                    tagExists = true;
+                }
+            });
+            // Push to tags array if tag has not already been parsed
+            if(!tagExists) {
+                tags.push(tag);
+            }
+        })
+    });
 ---
 
-<script>
-    import { getResults } from "./BlogSearch.astro";
+<div id="search">
+    <div id="filters">
+        <h3>Tags</h3>
+        <div id="tags">
+            
+        </div>
+    </div>
+    <button id="searchButton">Search</button>
+    <h2>Results</h2>
+    <div id="results">
 
-    getResults();
-</script>
-
-<div id="filters">
-    <div>
-        {tags.map(tag => (
-            <p>{tag}</p>
-        ))}
     </div>
 </div>
-<div id="results">
 
-</div>
+<script define:vars={{tags, posts}} lang="ts">
+    
+
+    let tagListElement = document.getElementById("tags");
+    tags.forEach((tag) => {
+        let element = document.createElement("button");
+        element.classList.add("tagBtn");
+        element.classList.add("addTag");
+        element.onclick = function() {changeTag(element, tag)}
+        element.append(document.createTextNode(tag));
+        tagListElement.append(element);
+    });
+
+    let searchBtn = document.getElementById("searchButton");
+    searchBtn.addEventListener("click", () => search());
+    
+    function changeTag(element, tag) {
+        if(element.classList.contains("addTag")) {
+            addTag(tag);
+            element.classList.remove("addTag");
+            element.classList.add("removeTag");
+        } else {
+            removeTag(tag);
+            element.classList.remove("removeTag");
+            element.classList.add("addTag");
+        }
+    }
+
+    var searchTags = new Array();
+    var searchResults = new Array();
+
+    function addTag(tag) {
+        if(!searchTags.includes(tag)) searchTags.push(tag);
+    }
+
+    function removeTag(tag) {
+        if(searchTags.includes(tag)) {
+            searchTags = searchTags.filter(tags => tags != tag);
+        }
+    }
+
+    function search() {
+        searchResults = [];
+        searchResults = posts.filter((post) => {
+            return searchTags.every((searchTag) => post.data.tags.includes(searchTag));
+        });
+        displayResults();
+    }
+
+    function displayResults() {
+        const list = document.getElementById("results");
+
+        while(list?.hasChildNodes()) list.removeChild(list.firstChild);
+
+        searchResults.forEach((result) => {
+            console.log("Adding result");
+            let element = document.createElement("a");
+            element.href = "/blog/"+result.data.slug;
+            element.appendChild(document.createTextNode(result.data.title));
+            list?.append(element);
+        });
+    }
+    
+</script>
 
 <style>
+    #search {
+        margin-left:1rem;
+        border:3px sandybrown ridge;
+        width: 25rem;
+        height:25rem;
+        padding:1rem;
+    }
 
+    :global(.tagBtn) {
+        font-size:0.9rem;
+        height: 1.5rem;
+        border-radius:0;
+        background-color:bisque;
+        transition:0.2s transform;
+    }
 
+    :global(.tagBtn:hover) {
+        transform: scale(1.01);
+        background-color:
+    }
+
+    :global(.addTag) {
+        
+    }
+
+    :global(.removeTag) {
+        background-color:burlywood;
+    }
+
+    #filters {
+        width:100%;
+        margin:auto;
+    }
+
+    #filters > h3 {
+        margin:0;
+        margin-top:1rem;
+    }
+
+    #tags {
+        height:5rem;
+        overflow-y: scroll;
+        border:black 1px solid;
+    }
+
+    #searchButton {
+        width:10rem;
+        height:2.5rem;
+        font-size:1.6rem;
+        margin:1rem;
+    }
 </style>

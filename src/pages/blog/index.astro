@@ -3,6 +3,7 @@ import RecentBlog from "../../components/RecentBlog.astro";
 import BlogHeader from "../../components/BlogHeader.astro";
 
 import { getCollection } from "astro:content";
+import BlogSearch from "../../components/BlogSearch.astro";
 
 const posts = (await getCollection("blog")).sort(
     (a, b) => b.data.updateDate.valueOf() - a.data.updateDate.valueOf(),
@@ -26,6 +27,7 @@ const posts = (await getCollection("blog")).sort(
         <BlogHeader/>
         <h2>My Blog</h2>
         <RecentBlog />
+        <BlogSearch />
     </body>
    
 </html>
