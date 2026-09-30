@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+import { type CollectionEntry } from 'astro:content';
+
+let posts = await getCollection("blog");
+
+let tagList = (await getCollection("blog")).map((post) => post.data.tags);
+let tags: string[] = new Array();
+
+// Search all posts for all tags
+tagList.forEach((postTags) => {
+    postTags.forEach((tag) => {
+        let tagExists = false;
+
+        // If tags array is empty then push tag to tags as it cannot be a duplicate
+        if(tags.length==0) {
+            tags.push(tag);
+        }
+
+        // Check if it is present in the tags array (already parsed).
+        tags.forEach((parsedTag) => {
+            if(tag==parsedTag) {
+                tagExists = true;
+            }
+        });
+        // Push to tags array if tag has not already been parsed
+        if(!tagExists) {
+            tags.push(tag);
+        }
+    })
+});
+
+let results: CollectionEntry<"blog">[] = new Array();
+
+export function getResults(searchTags: string[]) {
+    results = [];
+    results = posts.sort((post) => {
+        let tagCheck: boolean[] = new Array();
+        searchTags.forEach((tag) => {
+            if(post.data.tags.)
+        });
+    })
+
+    return results;
+}
+---
+
+<script>
+    import { getResults } from "./BlogSearch.astro";
+
+    getResults();
+</script>
+
+<div id="filters">
+    <div>
+        {tags.map(tag => (
+            <p>{tag}</p>
+        ))}
+    </div>
+</div>
+<div id="results">
+
+</div>
+
+<style>
+
+
+</style>

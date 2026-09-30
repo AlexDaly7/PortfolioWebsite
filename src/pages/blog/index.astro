@@ -1,0 +1,31 @@
+---
+import RecentBlog from "../../components/RecentBlog.astro";
+import BlogHeader from "../../components/BlogHeader.astro";
+
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.updateDate.valueOf() - a.data.updateDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+        <script>
+            
+        </script>
+        <style>
+            :global(body) {
+                margin:0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <BlogHeader/>
+        <h2>My Blog</h2>
+        <RecentBlog />
+    </body>
+   
+</html>

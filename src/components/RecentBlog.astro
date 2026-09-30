@@ -1,0 +1,47 @@
+---
+import { getCollection } from "astro:content";
+
+let posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.updateDate.valueOf() - a.data.updateDate.valueOf()
+);
+if(posts.length>=6) {
+    posts = posts.splice(1, 5);
+}
+
+---
+
+<style>
+    div {
+        background-color: blanchedalmond;
+        width:10rem;
+        border:3px double goldenrod;
+        padding-bottom:1rem;
+    }
+
+    h2 {
+        text-align:center;
+        border-bottom:3px double goldenrod;
+        padding-bottom:1rem;
+        margin-bottom:0.5rem;
+    }
+
+    a {
+        padding-left:1rem;
+        display:block;
+        color: black;
+        transition:1s all;
+        font-size:1.2rem;
+    }
+
+    a:hover {
+        color:white;
+        text-shadow:1.5px 1.5px 1px black;
+    }
+</style>
+
+<div>
+    <h2>Recent Blogs</h2>
+    {posts.map(post => (
+        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+    ))}
+</div>
