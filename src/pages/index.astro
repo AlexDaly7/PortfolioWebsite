@@ -139,6 +139,7 @@ import { Font } from "astro:assets";
 			body {
 				position:relative;
 				margin:0;
+				background-color: bisque;
 			}
 
 			#mainMenu {
@@ -152,17 +153,28 @@ import { Font } from "astro:assets";
 
 			#mainFiller > h1 {
 				font-size: 8.5vw;
-				margin-left: 5vw;
-				border: black 4px ridge;
-				width:20vw;
+				margin: 5vw;
+				padding:1rem;
+				width:20rem;
+				background-color:wheat;
 				text-align:center;
+				border-radius:1rem;
+			}
+
+			#tagLine {
+				margin:5vw;
+				width:20rem;
+				padding:1rem;
+				background-color:wheat;
+				text-align:center;
+				border-radius:1rem;
 			}
 			
 			#mainList {
 				list-style:none;
 				display:inline-block;
-				border:1px solid black;
 				width:50vw;
+				margin:0;
 			}
 
 			.mainListItem {
@@ -171,7 +183,7 @@ import { Font } from "astro:assets";
 				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
 				display:block;
 				
-				height:160px;
+				height:140px;
 			}
 
 			.mainListLink {
@@ -213,7 +225,11 @@ import { Font } from "astro:assets";
 			<div id="mainMenu">
 				<div id="mainFiller">
 					<h1>Alex Daly</h1>
+					<div id="tagLine">
+						<p></p>
+					</div>
 				</div>
+				
 				<ul id="mainList">
 					<li class="mainListItem"><a href="about" class="mainListLink">About</a></li>
 					<li class="mainListItem"><a href="blog" class="mainListLink">Blog</a></li>
