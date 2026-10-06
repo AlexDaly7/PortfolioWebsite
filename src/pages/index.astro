@@ -9,6 +9,9 @@ import { Font } from "astro:assets";
 		<Font cssVariable="--font-OpenSans" preload />
 		<Font cssVariable="--font-Recursive" preload />
 		<Font cssVariable="--font-Roboto" preload />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 		<script>
 			import type { mainMenuItem } from '../types';
 
@@ -29,7 +32,7 @@ import { Font } from "astro:assets";
 					characters: new Array(),
 					timeoutEnter: new Array(),
 					timeoutLeave: new Array(),
-					slug: mainListLink[i].getAttribute("href")?.toString()
+					slug: mainListItems[i].getAttribute("href")?.toString()
 				}
 
 				var characters = mainListLink[i].textContent.split("");
@@ -136,10 +139,9 @@ import { Font } from "astro:assets";
 		
 		</script>
 		<style>
+			@import "tailwindcss";
 			body {
-				position:relative;
 				margin:0;
-				background-color: bisque;
 			}
 
 			#mainMenu {
@@ -149,25 +151,6 @@ import { Font } from "astro:assets";
 			#mainFiller {
 				width:50vw;
 				height:10rem;
-			}
-
-			#mainFiller > h1 {
-				font-size: 8.5vw;
-				margin: 5vw;
-				padding:1rem;
-				width:20rem;
-				background-color:wheat;
-				text-align:center;
-				border-radius:1rem;
-			}
-
-			#tagLine {
-				margin:5vw;
-				width:20rem;
-				padding:1rem;
-				background-color:wheat;
-				text-align:center;
-				border-radius:1rem;
 			}
 			
 			#mainList {
@@ -182,61 +165,63 @@ import { Font } from "astro:assets";
 				text-underline-offset: 3px;
 				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
 				display:block;
-				
-				height:140px;
+				z-index:10;
+				height:6vw;
+				position:relative;
 			}
 
 			.mainListLink {
 				font-family:"Times New Roman";
-				font-size:10rem;
+				font-size:6vw;
 				font-variant: small-caps;
 				color:black;
 				z-index:10;
+				margin:0;
 			}
 
 			:global(.mainFrame) {
 				display:inline-block;
 				position:absolute;
 				right:1rem;
+				top:1rem;
 				transition:0.5s all;
 				transform:scale(0.1);
 				opacity:0;
 				z-index:5;
-				width: 1280px;
-				height: 900px;
 				pointer-events:none;
 				transform-origin: top right;
 			}
 
 			:global(.mainFrame.is-visible) {
+				height:6vw;
+				width:20vw;
 				display:inline-block;
 				position:absolute;
 				transition:1.5s all cubic-bezier(0.86, 0.34, 0.64, 0.93);
-				transform:scale(0.200);
-				transform-origin: top right;
+				transform:scale(1);
 				opacity:1;
+				overflow:none;
 				
 			}
 
 		</style>
 	</head>
-	<body>
+	<body class="bg-olive-200">
 		<main>
 			<div id="mainMenu">
-				<div id="mainFiller">
-					<h1>Alex Daly</h1>
+				<div id="mainFiller" class="text-center">
+					<h1 class="bg-mist-300 mx-auto max-w-sm p-12 sd:p-4 mt-20 rounded-lg text-4xl font-serif">Alex Daly</h1>
 					<div id="tagLine">
 						<p></p>
 					</div>
 				</div>
 				
 				<ul id="mainList">
-					<li class="mainListItem"><a href="about" class="mainListLink">About</a></li>
-					<li class="mainListItem"><a href="blog" class="mainListLink">Blog</a></li>
-					<li class="mainListItem"><a href="contact" class="mainListLink">Contact</a></li>
-					<!--FIX BUG, projects will push its iframe under itself. -->
-					<li class="mainListItem"><a href="projects" class="mainListLink">Projects</a></li>
-					<li class="mainListItem"><a href="reviews" class="mainListLink">Reviews</a></li>
+					<a href="about" class="mainListItem"><p class="mainListLink">About</p></a>
+					<a href="blog" class="mainListItem"><p class="mainListLink">Blog</p></a>
+					<a href="contact" class="mainListItem"><p class="mainListLink">Contact</p></a>
+					<a href="projects" class="mainListItem"><p class="mainListLink">Projects</p></a>
+					<a href="reviews" class="mainListItem"><p class="mainListLink">Reviews</p></a>
 					
 				</ul>
 			</div>
