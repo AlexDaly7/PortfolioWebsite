@@ -1,0 +1,19 @@
+---
+import "../styles/global.css";
+import { Font } from "astro:assets";
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <Font cssVariable="--font-Fraunces" preload />
+        <Font cssVariable="--font-OpenSans" preload />
+        <Font cssVariable="--font-Recursive" preload />
+        <Font cssVariable="--font-Roboto" preload />
+    </head>
+        <body class="bg-olive-200">
+        <slot />
+    </body>
+</html>
