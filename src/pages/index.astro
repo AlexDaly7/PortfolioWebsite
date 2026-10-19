@@ -1,15 +1,11 @@
 ---
 import { Font } from "astro:assets";
+import Base from "../layouts/Base.astro";
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<Font cssVariable="--font-Fraunces" preload />
-		<Font cssVariable="--font-OpenSans" preload />
-		<Font cssVariable="--font-Recursive" preload />
-		<Font cssVariable="--font-Roboto" preload />
-
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		<script>
@@ -50,18 +46,16 @@ import { Font } from "astro:assets";
 					mainListLink[i].append(element);
 				}
 				menuItems.push(item);
-				createFrame(item);
 			}
 
 			for(let i=0;i<menuItems.length;i++) {
 				let item = menuItems[i];
 				item.element.addEventListener("mouseenter", () => {
 					clearTimeouts(item);
-					showFrame(item);
 
 					item.fontInterval = setInterval(() => {
 						changeFont(item);
-					}, 100);
+					}, 200);
 					
 					for(let j=0;j<item.characters.length;j++) {
 						if(item.timeoutEnter==undefined) return;
@@ -73,7 +67,6 @@ import { Font } from "astro:assets";
 				});
 				item.element.addEventListener("mouseleave", () => {
 					clearTimeouts(item);
-					removeFrame(item);
 
 					for(let j=item.characters.length-1;j>=0;j--) {
 						if(item.timeoutLeave==undefined) return;
@@ -90,7 +83,7 @@ import { Font } from "astro:assets";
 					// Generate a random number with 1.7x the range of the fonts array. If it is over return the function
 					// This gives the font a chance not to change every tick of this function.
 					let random = Math.floor(Math.random()*(fonts.length*1.7));
-					if(random>=fonts.length) return; 
+					if(random>=fonts.length) return;
 
 					item.characters[i].style.fontFamily=fonts[random].toString();
 				}
@@ -112,51 +105,10 @@ import { Font } from "astro:assets";
 				
 				clearInterval(item.fontInterval);
 			}
-
-			function showFrame(item: mainMenuItem) {
-				if(item.iframe==undefined) {
-					createFrame(item);
-				} else {
-					item.iframe.classList.add("is-visible");
-				}
-			}
-
-			function removeFrame(item: mainMenuItem) {
-				if(item.iframe!=undefined) {
-					item.iframe.classList.remove("is-visible");
-				}
-			}
-
-			function createFrame(item: mainMenuItem) {
-				let frame = document.createElement("iframe");
-				frame.style.border = "";
-				frame.classList.add("mainFrame");
-
-				if(item.slug!=undefined) frame.src = item.slug;
-				item.iframe = frame;
-				item.element.appendChild(frame);
-			}
 		
 		</script>
 		<style>
-			@import "tailwindcss";
 			body {
-				margin:0;
-			}
-
-			#mainMenu {
-				display:flex;
-			}
-
-			#mainFiller {
-				width:50vw;
-				height:10rem;
-			}
-			
-			#mainList {
-				list-style:none;
-				display:inline-block;
-				width:50vw;
 				margin:0;
 			}
 
@@ -171,7 +123,7 @@ import { Font } from "astro:assets";
 			}
 
 			.mainListLink {
-				font-family:"Times New Roman";
+				font-family:"--font-Fraunces";
 				font-size:6vw;
 				font-variant: small-caps;
 				color:black;
@@ -179,41 +131,14 @@ import { Font } from "astro:assets";
 				margin:0;
 			}
 
-			:global(.mainFrame) {
-				display:inline-block;
-				position:absolute;
-				right:1rem;
-				top:1rem;
-				transition:0.5s all;
-				transform:scale(0.1);
-				opacity:0;
-				z-index:5;
-				pointer-events:none;
-				transform-origin: top right;
-			}
-
-			:global(.mainFrame.is-visible) {
-				height:6vw;
-				width:20vw;
-				display:inline-block;
-				position:absolute;
-				transition:1.5s all cubic-bezier(0.86, 0.34, 0.64, 0.93);
-				transform:scale(1);
-				opacity:1;
-				overflow:none;
-				
-			}
-
 		</style>
 	</head>
 	<body class="bg-olive-200">
-		<main>
-			<div id="mainMenu">
-				<div id="mainFiller" class="text-center">
-					<h1 class="bg-mist-300 mx-auto max-w-sm p-12 sd:p-4 mt-20 rounded-lg text-4xl font-serif">Alex Daly</h1>
-					<div id="tagLine">
-						<p></p>
-					</div>
+		<Base>
+			<div id="mainMenu" class="h-dvh overflow-hidden p-10 flex justify-between">
+				<div id="mainFiller" class="self-start">
+					<h1 class="text-4xl">Alex Daly</h1>
+					<p class="mt-2 max-w-prose">Software Developer</p>
 				</div>
 				
 				<ul id="mainList">
@@ -222,9 +147,8 @@ import { Font } from "astro:assets";
 					<a href="contact" class="mainListItem"><p class="mainListLink">Contact</p></a>
 					<a href="projects" class="mainListItem"><p class="mainListLink">Projects</p></a>
 					<a href="reviews" class="mainListItem"><p class="mainListLink">Reviews</p></a>
-					
 				</ul>
 			</div>
-		</main>
+		</Base>
 	</body>
 </html>
