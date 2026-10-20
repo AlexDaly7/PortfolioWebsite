@@ -8,5 +8,5 @@ export interface mainMenuItem {
     timeoutVisible?: ReturnType<typeof setInterval>,
     timeoutEnter?: ReturnType<typeof setTimeout>[],
     timeoutLeave?: ReturnType<typeof setTimeout>[],
-    iframe?: HTMLElement,
+    preview: HTMLElement,
 }

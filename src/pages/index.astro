@@ -1,6 +1,18 @@
 ---
-import { Font } from "astro:assets";
 import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.updateDate.valueOf() - a.data.updateDate.valueOf()
+);
+
+const menuDisplay = [
+	{name: "About", link: "/about", tag: "Hi!", text: "My name is Alex"},
+	{name: "Blog", link: "/blog", tag: "My latest blog", text: posts[0]?.data.title ?? "No blogs yet..."},
+	{name: "Contact", link: "/contact", tag: "Say hello!", text: "Please get in touch"},
+	{name: "Projects", link: "/project", tag: "Featured", text: "BossPlugin"},
+	{name: "Reviews", link: "/review", tag: "Latest review", text: "No review available"},
+];
 ---
 
 <!doctype html>
@@ -10,11 +22,14 @@ import Base from "../layouts/Base.astro";
 
 		<script>
 			import type { mainMenuItem } from '../types';
+			
+			
 
 			const menuItems: mainMenuItem[] = new Array();
 
 			const mainListItems = document.getElementsByClassName("mainListItem") as HTMLCollectionOf<HTMLElement>;
 			const mainListLink = document.getElementsByClassName("mainListLink") as HTMLCollectionOf<HTMLElement>;
+			const previews = document.getElementsByClassName("menuPreview") as HTMLCollectionOf<HTMLElement>;
 			// ["Sans", "Algerian", "Garamond", "Papyrus"]
 			const fonts = ["var(--font-Fraunces)", "var(--font-OpenSans)", "var(--font-Recursive)", "var(--font-Roboto)"]
 
@@ -28,7 +43,8 @@ import Base from "../layouts/Base.astro";
 					characters: new Array(),
 					timeoutEnter: new Array(),
 					timeoutLeave: new Array(),
-					slug: mainListItems[i].getAttribute("href")?.toString()
+					slug: mainListItems[i].getAttribute("href")?.toString(),
+					preview: previews[i],
 				}
 
 				var characters = mainListLink[i].textContent.split("");
@@ -62,6 +78,9 @@ import Base from "../layouts/Base.astro";
 
 						item.timeoutEnter[j] = setTimeout(() => {
 							item.characters[j].style.transform="translate(-25vw)";
+							if(j==item.characters.length-1) {
+								item.preview.style.transform="translate(-25vw)";
+							}
 						}, j*100);
 					}
 				});
@@ -73,6 +92,9 @@ import Base from "../layouts/Base.astro";
 
 						item.timeoutLeave[j] = setTimeout(() => {
 							resetChar(item.characters[j]);
+							if(j==item.characters.length-1) {
+								item.preview.style.transform="translate(0vw)";
+							}
 						}, (item.characters.length-j)*105);
 					}
 				});
@@ -131,6 +153,14 @@ import Base from "../layouts/Base.astro";
 				margin:0;
 			}
 
+			.menuPreview {
+				position:relative;
+				z-index:1;
+				bottom:2rem;
+				left:30vw;
+				transition: all 0.5s;
+			}
+
 		</style>
 	</head>
 	<body class="bg-olive-200">
@@ -142,11 +172,17 @@ import Base from "../layouts/Base.astro";
 				</div>
 				
 				<ul id="mainList">
-					<a href="about" class="mainListItem"><p class="mainListLink">About</p></a>
-					<a href="blog" class="mainListItem"><p class="mainListLink">Blog</p></a>
-					<a href="contact" class="mainListItem"><p class="mainListLink">Contact</p></a>
-					<a href="projects" class="mainListItem"><p class="mainListLink">Projects</p></a>
-					<a href="reviews" class="mainListItem"><p class="mainListLink">Reviews</p></a>
+					{menuDisplay.map((item) => (
+						<li>
+							<a href={item.link} class="mainListItem">
+								<span class="mainListLink">{item.name}</span>
+							</a>
+							<div class="menuPreview w-50 text-center" aria-hidden="true">
+								<p class="text-mist-500 text-center">{item.tag}</p>
+								<h4 class="text-xl">{item.text}</h4>
+							</div>
+						</li>
+					))}
 				</ul>
 			</div>
 		</Base>
