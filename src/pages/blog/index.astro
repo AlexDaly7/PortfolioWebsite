@@ -4,6 +4,7 @@ import BlogHeader from "../../components/BlogHeader.astro";
 
 import { getCollection } from "astro:content";
 import BlogSearch from "../../components/BlogSearch.astro";
+import Base from "../../layouts/Base.astro";
 
 const posts = (await getCollection("blog")).sort(
     (a, b) => b.data.updateDate.valueOf() - a.data.updateDate.valueOf(),
@@ -23,11 +24,15 @@ const posts = (await getCollection("blog")).sort(
         </style>
     </head>
 
-    <body>
-        <BlogHeader/>
-        <h2>My Blog</h2>
-        <RecentBlog />
-        <BlogSearch />
-    </body>
+    <Base>
+        <div class="mt-2">
+            <BlogHeader/>
+        </div>
+        <h2 class="m-8 text-4xl border-mauve-500 border-2 p-4 w-50 text-center bg-mauve-300 rounded-md">My Blog</h2>
+        <div class="m-8">
+            <RecentBlog/>
+        </div>
+        <BlogSearch/>
+    </Base>
    
 </html>
