@@ -1,6 +1,6 @@
 {
   "name": "portfolio-website",
-  "compatibility_date": "2026-10-20", // Update to the day you deploy
+  "compatibility_date": "2026-10-20",
   "assets": {
     "directory": "./dist",
   }
