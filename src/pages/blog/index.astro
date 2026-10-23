@@ -1,9 +1,9 @@
 ---
-import RecentBlog from "../../components/RecentBlog.astro";
-import BlogHeader from "../../components/BlogHeader.astro";
+import RecentBlog from "../../components/blog/RecentBlog.astro";
+import BlogHeader from "../../components/blog/BlogHeader.astro";
 
 import { getCollection } from "astro:content";
-import BlogSearch from "../../components/BlogSearch.astro";
+import BlogSearch from "../../components/blog/BlogSearch.astro";
 import Base from "../../layouts/Base.astro";
 
 const posts = (await getCollection("blog")).sort(
