@@ -9,9 +9,9 @@
 	const menuDisplay = [
 		{name: "About", link: "/about", tag: "Hi!", text: "My name is Alex"},
 		{name: "Blog", link: "/blog", tag: "My latest blog", text: posts[0]?.data.title ?? "No blogs yet..."},
-		{name: "Contact", link: "/contact", tag: "Say hello!", text: "Please get in touch"},
-		{name: "Projects", link: "/project", tag: "Featured", text: "BossPlugin"},
-		{name: "Reviews", link: "/review", tag: "Latest review", text: "No review available"},
+		{name: "Dashboard", link: "/dashboard", tag: "What I need every morning", text: "Daily Dashboard"},
+		{name: "Projects", link: "/projects", tag: "Featured", text: "BossPlugin"},
+		{name: "Reviews", link: "/reviews", tag: "Latest review", text: "No review available"},
 	];
 ---
 
@@ -80,7 +80,7 @@
 							if(j==item.characters.length-1) {
 								item.preview.style.transform="translate(-25vw)";
 							}
-						}, j*100);
+						}, j*70);
 					}
 				});
 				item.element.addEventListener("mouseleave", () => {
@@ -147,7 +147,6 @@
 				font-family:"--font-Fraunces";
 				font-size:6vw;
 				font-variant: small-caps;
-				color:black;
 				z-index:10;
 				margin:0;
 			}
@@ -165,7 +164,7 @@
 		<div id="mainMenu" class="h-dvh overflow-hidden p-10 flex justify-between">
 			<div id="mainFiller" class="self-start">
 				<h1 class="text-4xl">Alex Daly</h1>
-				<p class="mt-2 max-w-prose">Software Developer, </p>
+				<p class="mt-2 max-w-prose">Software Developer, Reader, </p>
 			</div>
 			
 			<ul id="mainList">
