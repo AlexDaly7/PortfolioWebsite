@@ -76,9 +76,9 @@
 						if(item.timeoutEnter==undefined) return;
 
 						item.timeoutEnter[j] = setTimeout(() => {
-							item.characters[j].style.transform="translate(-25vw)";
+							item.characters[j].style.transform="translate(35vw)";
 							if(j==item.characters.length-1) {
-								item.preview.style.transform="translate(-25vw)";
+								item.preview.style.transform="translate(50vw)";
 							}
 						}, j*70);
 					}
@@ -134,7 +134,6 @@
 			}
 
 			.mainListItem {
-				text-align: right;
 				text-underline-offset: 3px;
 				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
 				display:block;
@@ -145,42 +144,43 @@
 
 			.mainListLink {
 				font-family:"--font-Fraunces";
-				font-size:6vw;
 				font-variant: small-caps;
 				z-index:10;
 				margin:0;
 			}
 
 			.menuPreview {
-				position:relative;
 				z-index:1;
-				bottom:2rem;
 				transition: all 0.5s;
 			}
 
+			body {
+				background: #2e80f2;
+				background: linear-gradient(238deg,rgba(46, 128, 242, 1) 0%, rgba(36, 116, 191, 1) 37%, rgba(11, 56, 153, 1) 74%, rgba(29, 32, 82, 1) 100%);	
+			}
 		</style>
 	</head>
 	<Base>
-		<div id="mainMenu" class="h-dvh overflow-hidden p-10 flex justify-between">
-			<div id="mainFiller" class="self-start">
-				<h1 class="text-4xl">Alex Daly</h1>
-				<p class="mt-2 max-w-prose">Software Developer, Reader, </p>
-			</div>
-			
+		<div id="mainMenu" class="h-dvh overflow-hidden p-10 flex justify-between mb-15">
 			<ul id="mainList">
 				<!-- TODO: Improve mobile experience -->
 				{menuDisplay.map((item) => (
 					<li>
-						<a href={item.link} class="mainListItem">
-							<span class="mainListLink">{item.name}</span>
-						</a>
-						<div class="menuPreview w-50 text-center left-[95%] sm:left-[125%]" aria-hidden="true">
-							<p class="text-mist-500 text-center text-xs md:text-sm lg:text-md">{item.tag}</p>
-							<h4 class="text-xs md:text-lg lg:text-xl">{item.text}</h4>
+						<div class="menuPreview w-50 text-center relative top-10 right-[60vw] sm:top-15 sm:right-[55vw] md:right-[48vw] lg:top-25 lg:right-[50vw]" aria-hidden="true">
+							<p class="text-mist-100 text-center text-xs md:text-sm lg:text-md">{item.tag}</p>
+							<h4 class="text-xs md:text-lg lg:text-xl font-bold">{item.text}</h4>
 						</div>
+						<a href={item.link} class="mainListItem">
+							<span class="mainListLink text-[8vw] sm:text-[6vw] md:text-[5vw]">{item.name}</span>
+						</a>
 					</li>
 				))}
 			</ul>
+			<div id="mainFiller" class="self-start w-[20vw] float-right">
+				<h1 class="text-4xl max-sm:text-right">Alex Daly</h1>
+				<p class="mt-2 max-w-prose max-sm:hidden">Computing student @ NCI, building useful web apps and Minecraft tools, seeking a 6 month placement in Dublin starting Jan 2027</p>
+				<img src="/assets/index/underConstruction.gif" class="ml-12 mt-5 w-15 h-auto sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
+			</div>
 		</div>
 	</Base>
 </html>

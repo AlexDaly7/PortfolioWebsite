@@ -1,6 +1,7 @@
 ---
-import "../styles/global.css";
-import { Font } from "astro:assets";
+    import "../styles/global.css";
+    import { Font } from "astro:assets";
+    import Footer from "../components/Footer.astro";
 ---
 
 <!doctype html>
@@ -13,7 +14,10 @@ import { Font } from "astro:assets";
         <Font cssVariable="--font-Recursive" preload />
         <Font cssVariable="--font-Roboto" preload />
     </head>
-        <body class="bg-olive-200">
-            <slot/>
+        <body class="bg-indigo-900">
+            <div class="min-h-screen">
+                <slot/>
+            </div>
+            <Footer/>
         </body>
 </html>
