@@ -1,0 +1,24 @@
+---
+    const results = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json")
+        .then(response => response.json())
+
+    const posts = new Array();
+
+    for(let i=0;i<5;i++) {
+        const post = await fetch("https://hacker-news.firebaseio.com/v0/item/"+results[i]+".json")
+            .then(response => response.json());
+        posts.push(post);
+    }
+
+---
+
+<ul class="w-3/12 p-6 pt-2 border-2 border-mauve-600 bg-mauve-300">
+    <h2 class="text-lg border-b-2 border-mauve-700 mb-2">Top <a href="https://news.ycombinator.com/" class="underline">HackerNews</a> stories</h2>
+    {posts.map((post) => (
+        <li>
+            <a href={post.url} class="before:content-['>'] before:text-mauve-900 before:text-xl block transition-all duration-500 text-mauve-600 hover:text-mauve-900 hover:scale-[102%]">
+                {post.title}
+            </a>
+        </li>
+    ))}
+</ul>

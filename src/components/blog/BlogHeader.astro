@@ -1,0 +1,20 @@
+---
+const links = [
+    {link: "/", name: "Home"},
+    {link: "/blog", name: "Blog Menu"}
+]
+---
+
+<div class="w-dvw h-10 text-left text-2xl text-mist-600">
+    {links.map((link) => (
+        <a href={link.link} 
+        class="transition-all text-shadow-xs text-shadow-slate-400 hover:text-shadow-sm hover:text-mist-700 ml-8">
+            {link.name}
+        </a>
+    ))}
+</div>
+
+<style>
+    
+
+</style>

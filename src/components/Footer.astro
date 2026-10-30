@@ -1,0 +1,24 @@
+---
+    const contact = [
+        {name: "GitHub", link: "https://github.com/AlexDaly7"},
+        {name: "LinkedIn", link: "https://www.linkedin.com/in/alexdaly7/"},
+        
+    ]
+---
+
+<div class="w-full flex">
+    <div class="p-4 ml-8">
+        <h2 class="text-4xl">Alex Daly</h2>
+    </div>
+    <div class="p-4 ml-10">
+        <h2 class="text-2xl">Contact me here!</h2>
+        <a href="mailto:hello@alexdaly.dev?subject=Inquiry&body=Hello! I would like to know more about...">hello@alexdaly.dev</a>
+        {contact.map((entry) => (
+            <a href={entry.link} class="block">My {entry.name}</a>
+        ))}
+    </div>
+    <div>
+        
+    </div>
+
+</div>

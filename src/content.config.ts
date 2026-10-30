@@ -15,4 +15,17 @@ const blog = defineCollection({
 		}),
 });
 
-export const collections = { blog };
+const reviews = defineCollection({
+	loader: glob({ base: './src/content/reviews', pattern: '**/*.{md,mdx}'}),
+	schema: () => 
+		z.object({
+			title: z.string(),
+			desc: z.string(),
+			slug: z.string(),
+			creationDate: z.coerce.date(),
+			updateDate: z.coerce.date(),
+			tags: z.array(z.string())
+		}),
+})
+
+export const collections = { blog, reviews };

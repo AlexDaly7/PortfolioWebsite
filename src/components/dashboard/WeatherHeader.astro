@@ -1,0 +1,47 @@
+---
+    const weather = await fetch("https://api.open-meteo.com/v1/forecast?latitude=53.35014&longitude=-6.266155&daily=temperature_2m_min,temperature_2m_max,weather_code,rain_sum&timezone=auto")
+        .then(response => response.json());
+
+    const WMOCode: Record<number, string> = {
+        0: "Clear",
+        1: "Mostly Clear",
+        2: "Partly Cloudy",
+        3: "Cloudy",
+        45: "Fog",
+        48: "Freezing Fog",
+        51: "Light Drizzle",
+        53: "Drizzle",
+        55: "Heavy Drizzle",
+        56: "Light Freezing Drizzle",
+        57: "Freezing Drizzle",
+        61: "Light Rain",
+        63: "Rain",
+        65: "Heavy Rain",
+        66: "Light Freezing Rain",
+        67: "Freezing Rain",
+        71: "Light Snow",
+        73: "Snow",
+        75: "Heavy Snow",
+        77: "Snow Grains",
+        80: "Light Rain Shower",
+        81: "Rain Shower",
+        82: "Heavy Rain Shower",
+        85: "Snow Shower",
+        86: "Heavy Snow Shower",
+        95: "Thunderstorm",
+        96: "Hailstorm",
+        99: "Heavy Hailstorm"
+    }
+---
+
+<div class="border-sky-900 border-2 bg-slate-500 p-2">
+    <h2 class="ml-10 text-xl">Weather in Dublin Today</h2>
+    <div class="flex justify-between">
+        <p>Today: {WMOCode[weather.daily.weather_code[0] as number]}</p>
+        <p>Min temp: {weather.daily.temperature_2m_min[0]}</p>
+        <p>Max temp: {weather.daily.temperature_2m_max[0]}</p>
+        <p>Rainfall: {weather.daily.rain_sum[0]}mm</p>
+    </div>
+    
+
+</div>
