@@ -53,9 +53,15 @@
 					const element = document.createElement("span");
 					element.classList.add("mainListChar");
 					element.appendChild(content);
-					element.style.transition="0.2s all";
+					element.style.transition="0.5s all";
 					element.style.display="inline-block";
 					element.ariaHidden = "true";
+					// Make the letters jump when hovered
+					element.addEventListener("mouseenter", () => {
+						if(item.preview.classList.contains("revealed")) {
+							element.dataset.bump = String(10);
+						}
+					});
 					item.fontArr[j] = j;
 
 					item.characters.push(element);
@@ -71,7 +77,7 @@
 
 					item.fontInterval = setInterval(() => {
 						changeFont(item);
-					}, 200);
+					}, 50);
 					
 					for(let j=0;j<item.characters.length;j++) {
 						if(item.timeoutEnter==undefined) return;
@@ -102,14 +108,22 @@
 			
 			function changeFont(item: mainMenuItem) {
 				for(let i=0;i<item.characters.length;i++) {
+					let char = item.characters[i];
+					let bump = parseFloat(char.dataset.bump ?? "0");
+
 					// Generate a random number with 1.7x the range of the fonts array. If it is over return the function
 					// This gives the font a chance not to change every tick of this function.
-					let random = Math.floor(Math.random()*(fonts.length*1.7));
-					if(random>=fonts.length) {
-						
+					let random = Math.floor(Math.random()*(fonts.length*50));
+					if(random<fonts.length&&bump<=1.5) {
+						char.style.fontFamily=fonts[random].toString();
+						bump += Math.random()*(fonts.length*0.5)+4;
+					} else {
+						bump = Math.max(0, bump - 0.8);
 					}
 
-					item.characters[i].style.fontFamily=fonts[random].toString();
+					char.dataset.bump = String(bump);
+					char.style.transform = "translateY(-"+(bump*10)+"px)";
+					char.style.textShadow = "#d2b5ff 2px "+((bump*6.5)+2)+"px 3px";
 				}
 			}
 
@@ -119,9 +133,11 @@
 			}
 
 			function resetChar(char: HTMLElement) {
-				char.style.fontFamily = "Times New Roman";
+				char.style.fontFamily="Times New Roman";
 				char.style.translate="0";
 				char.style.opacity="100%";
+				char.style.transform="translateY(0)";
+				char.style.textShadow="#d2b5ff 2px 2px 5px";
 			}
 
 			function clearTimeouts(item: mainMenuItem) {
@@ -170,12 +186,7 @@
 			}
 
 			.menuPreview.revealed {
-				left: -5%;
-			}
-
-			body {
-				background: #2e80f2;
-				background: linear-gradient(135deg, #c9f5e4 0%, #b8d4ff 50%, #d9c2ff 100%);	
+				left: 0%;
 			}
 		</style>
 	</head>
@@ -184,7 +195,7 @@
 			<ul id="mainList" class="flex-1">
 				<!-- TODO: Improve mobile experience -->
 				{menuDisplay.map((item) => (
-					<li class="relative h-[13vh] items-center">
+					<li class="relative h-[13vh] w-[50vw] items-center">
 						<div class="menuPreview" aria-hidden="true">
 							<p class="text-mist-700 text-[clamp(0.7rem,1.2vw,0.9rem)]">{item.tag}</p>
 							<h4 class="text-[clamp(0.9rem,1.8vw,1.4rem)] font-bold line-clamp-2">{item.text}</h4>
@@ -195,11 +206,13 @@
 					</li>
 				))}
 			</ul>
-			<div id="mainFiller" class="self-start w-[30vw] float-right sm:w-[20vw]">
-				<h1 class="text-3xl">Alex Daly</h1>
-				<p class="mt-2 max-w-prose max-sm:hidden">Computing student @ NCI, building useful web apps and Minecraft tools, seeking a 6 month placement in Dublin starting Jan 2027</p>
-				<p class="mt-2 sm:hidden">Computing student at NCI</p>
-				<img src="/assets/index/underConstruction.gif" class="ml-12 mt-5 w-15 h-auto sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
+			<div id="mainFiller" class="self-start w-[40vw] float-right sm:w-[30vw]">
+
+				<h1 class="text-xl float-right sm:float-left sm:text-3xl inline">Alex Daly</h1>
+				<img src="/assets/index/flag.gif" class="w-10 h-auto inline ml-3 mr-5 float-right sm:mr-0 sm:float-left relative top-2">	
+				<p class="mt-2 max-w-prose max-sm:hidden block clear-both">Computing student @ NCI, building useful web apps and Minecraft tools, seeking a 6 month placement in Dublin starting Jan 2027</p>
+				<p class="mt-2 sm:hidden clear-both text-right">Computing student at NCI</p>
+				<img src="/assets/index/underConstruction.gif" class="ml-12 mt-5 w-15 h-auto max-sm:hidden sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
 			</div>
 		</div>
 	</Base>
