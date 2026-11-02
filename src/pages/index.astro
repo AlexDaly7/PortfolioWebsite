@@ -55,6 +55,7 @@
 					element.appendChild(content);
 					element.style.transition="0.2s all";
 					element.style.display="inline-block";
+					element.ariaHidden = "true";
 					item.fontArr[j] = j;
 
 					item.characters.push(element);
@@ -76,9 +77,9 @@
 						if(item.timeoutEnter==undefined) return;
 
 						item.timeoutEnter[j] = setTimeout(() => {
-							item.characters[j].style.transform="translate(35vw)";
+							activateChar(item.characters[j]);
 							if(j==item.characters.length-1) {
-								item.preview.style.transform="translate(50vw)";
+								item.preview.classList.add("revealed");
 							}
 						}, j*70);
 					}
@@ -92,7 +93,7 @@
 						item.timeoutLeave[j] = setTimeout(() => {
 							resetChar(item.characters[j]);
 							if(j==item.characters.length-1) {
-								item.preview.style.transform="translate(0vw)";
+								item.preview.classList.remove("revealed");
 							}
 						}, (item.characters.length-j)*105);
 					}
@@ -104,15 +105,23 @@
 					// Generate a random number with 1.7x the range of the fonts array. If it is over return the function
 					// This gives the font a chance not to change every tick of this function.
 					let random = Math.floor(Math.random()*(fonts.length*1.7));
-					if(random>=fonts.length) return;
+					if(random>=fonts.length) {
+						
+					}
 
 					item.characters[i].style.fontFamily=fonts[random].toString();
 				}
 			}
 
+			function activateChar(char: HTMLElement) {
+				char.style.translate="28vw";
+				char.style.opacity="75%";
+			}
+
 			function resetChar(char: HTMLElement) {
 				char.style.fontFamily = "Times New Roman";
-				char.style.transform = "translate(0rem)";
+				char.style.translate="0";
+				char.style.opacity="100%";
 			}
 
 			function clearTimeouts(item: mainMenuItem) {
@@ -138,7 +147,6 @@
 				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
 				display:block;
 				z-index:10;
-				height:6vw;
 				position:relative;
 			}
 
@@ -147,38 +155,50 @@
 				font-variant: small-caps;
 				z-index:10;
 				margin:0;
+				text-shadow: #d2b5ff 3px 3px 5px;
 			}
 
 			.menuPreview {
+				position:absolute;
+				top:20%;
+				width: min(14rem, 30vw);
 				z-index:1;
 				transition: all 0.5s;
+				text-align: center;
+				pointer-events: none;
+				left:-80%;
+			}
+
+			.menuPreview.revealed {
+				left: -5%;
 			}
 
 			body {
 				background: #2e80f2;
-				background: linear-gradient(238deg,rgba(46, 128, 242, 1) 0%, rgba(36, 116, 191, 1) 37%, rgba(11, 56, 153, 1) 74%, rgba(29, 32, 82, 1) 100%);	
+				background: linear-gradient(135deg, #c9f5e4 0%, #b8d4ff 50%, #d9c2ff 100%);	
 			}
 		</style>
 	</head>
 	<Base>
 		<div id="mainMenu" class="h-dvh overflow-hidden p-10 flex justify-between mb-15">
-			<ul id="mainList">
+			<ul id="mainList" class="flex-1">
 				<!-- TODO: Improve mobile experience -->
 				{menuDisplay.map((item) => (
-					<li>
-						<div class="menuPreview w-50 text-center relative top-10 right-[60vw] sm:top-15 sm:right-[55vw] md:right-[48vw] lg:top-25 lg:right-[50vw]" aria-hidden="true">
-							<p class="text-mist-100 text-center text-xs md:text-sm lg:text-md">{item.tag}</p>
-							<h4 class="text-xs md:text-lg lg:text-xl font-bold">{item.text}</h4>
+					<li class="relative h-[13vh] items-center">
+						<div class="menuPreview" aria-hidden="true">
+							<p class="text-mist-700 text-[clamp(0.7rem,1.2vw,0.9rem)]">{item.tag}</p>
+							<h4 class="text-[clamp(0.9rem,1.8vw,1.4rem)] font-bold line-clamp-2">{item.text}</h4>
 						</div>
-						<a href={item.link} class="mainListItem">
-							<span class="mainListLink text-[8vw] sm:text-[6vw] md:text-[5vw]">{item.name}</span>
+						<a href={item.link} class="mainListItem" aria-label={item.name}>
+							<span class="mainListLink text-[8vw] sm:text-[6vw] md:text-[4vw]">{item.name}</span>
 						</a>
 					</li>
 				))}
 			</ul>
-			<div id="mainFiller" class="self-start w-[20vw] float-right">
-				<h1 class="text-4xl max-sm:text-right">Alex Daly</h1>
+			<div id="mainFiller" class="self-start w-[30vw] float-right sm:w-[20vw]">
+				<h1 class="text-3xl">Alex Daly</h1>
 				<p class="mt-2 max-w-prose max-sm:hidden">Computing student @ NCI, building useful web apps and Minecraft tools, seeking a 6 month placement in Dublin starting Jan 2027</p>
+				<p class="mt-2 sm:hidden">Computing student at NCI</p>
 				<img src="/assets/index/underConstruction.gif" class="ml-12 mt-5 w-15 h-auto sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
 			</div>
 		</div>
