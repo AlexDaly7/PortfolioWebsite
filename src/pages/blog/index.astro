@@ -18,21 +18,23 @@ const posts = (await getCollection("blog")).sort(
             
         </script>
         <style>
-            :global(body) {
-                margin:0;
+            #header {
+                text-shadow: #d2b5ff 2px 2px 3px;
             }
+
+            
         </style>
     </head>
 
     <Base>
-        <div class="mt-2">
+        <div class="p-5">
             <BlogHeader/>
+            <h2 class="m-4 text-6xl w-70 text-center rounded-md" id="header">My Blog</h2>
+            <div class="m-8">
+                <RecentBlog/>
+            </div>
+            <BlogSearch/>
         </div>
-        <h2 class="m-8 text-4xl border-mauve-500 border-2 p-4 w-50 text-center bg-mauve-300 rounded-md">My Blog</h2>
-        <div class="m-8">
-            <RecentBlog/>
-        </div>
-        <BlogSearch/>
     </Base>
    
 </html>

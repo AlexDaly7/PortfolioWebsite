@@ -11,12 +11,14 @@ if(posts.length>=6) {
 ---
 
 <style>
-
+    #body {
+        box-shadow: #d2b5ff 2px 2px 3px;
+    }
 </style>
 
-<div class="w-70 border-2 border-mauve-600 bg-mauve-300 p-2">
+<div class="w-70 p-2 bg-mauve-200 h-40" id="body">
     <h2 class="text-center text-xl border-b-2 mb-1.5">Recent Blogs</h2>
-    <ul>
+    <ul class="overflow-auto">
         {posts.map(post => (
             <li>
                 <a href={`/blog/${post.id}/`}
@@ -25,5 +27,8 @@ if(posts.length>=6) {
                 </a>
             </li>
         ))}
+        {(posts.length<=5) &&
+            <p class="ml-2">...</p>
+        }
     </ul>
 </div>

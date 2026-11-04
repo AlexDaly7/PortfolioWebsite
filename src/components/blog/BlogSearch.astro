@@ -49,6 +49,8 @@
 <script define:vars={{tags, posts}} lang="ts">
 
     const tagListElement = document.getElementById("tags");
+
+    // Add tag buttons
     tags.forEach((tag) => {
         let element = document.createElement("button");
         element.classList.add("tagBtn");
@@ -57,10 +59,12 @@
         element.append(document.createTextNode(tag));
         tagListElement.append(element);
     });
-
+    
+    // Search button listener
     const searchBtn = document.getElementById("searchButton");
     searchBtn.addEventListener("click", () => search());
     
+    // Change button to other button on click
     function changeTag(element, tag) {
         if(element.classList.contains("addTag")) {
             addTag(tag);
