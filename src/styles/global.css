@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+.lightBg {
+    background-color: white;
+    box-shadow: rgba(0,0,0,0.08) 1px 3px 4px;
+}
+
+.textShadow {
+    text-shadow: rgba(0,0,0,0.2) 2px 2px 4px;
+}
+
+.linkHover {
+    transition: 0.5s all;
+    display: block;
+}
+
+.linkHover:hover {
+    text-shadow: rgba(0,0,0,0.5) 2px 2px 2px;
+    transform: translateY(-2px);
+}
+
+.button {
+    background: var(--color-fuchsia-700);
+    color: white;
+    transition: 0.5s all;
+    box-shadow: rgba(0,0,0,0.08) 1px 3px 4px;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+ 
+.headerFont {
+    font-family: var("--font-Jakarta");
+    color: #18181B;
+}

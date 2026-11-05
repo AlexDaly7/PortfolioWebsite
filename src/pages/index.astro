@@ -106,6 +106,23 @@
 				});
 			}
 			
+			const gif = document.getElementById("constructionGif");
+			let rotation = 0;
+			let forward = true;
+			if(gif) {
+				setInterval(() => {
+					console.log("Interval...");
+					if(forward) rotation += 0.5
+					else rotation -= 0.5;
+
+					gif.style.transform = "rotate("+rotation+"deg)";
+
+					if(rotation>5) forward = false;
+					else if(rotation<-5) forward = true;
+				}, 50);
+			}
+			
+
 			function changeFont(item: mainMenuItem) {
 				for(let i=0;i<item.characters.length;i++) {
 					let char = item.characters[i];
@@ -123,7 +140,12 @@
 
 					char.dataset.bump = String(bump);
 					char.style.transform = "translateY(-"+(bump*10)+"px)";
-					char.style.textShadow = "#d2b5ff 2px "+((bump*6.5)+2)+"px 3px";
+					if(bump!=0) {
+						char.style.textShadow = "rgba(0,0,0,0.2) 2px "+((bump*6.5)+2)+"px 3px";
+					} else {
+						char.style.textShadow = "";
+					}
+					
 				}
 			}
 
@@ -133,11 +155,11 @@
 			}
 
 			function resetChar(char: HTMLElement) {
-				char.style.fontFamily="Times New Roman";
-				char.style.translate="0";
-				char.style.opacity="100%";
-				char.style.transform="translateY(0)";
-				char.style.textShadow="#d2b5ff 2px 2px 5px";
+				char.style.fontFamily = "var(--font-Fraunces)";
+				char.style.translate = "0";
+				char.style.opacity = "100%";
+				char.style.transform = "translateY(0)";
+				char.style.textShadow = "";
 			}
 
 			function clearTimeouts(item: mainMenuItem) {
@@ -164,25 +186,25 @@
 				display:block;
 				z-index:10;
 				position:relative;
+
 			}
 
 			.mainListLink {
-				font-family:"--font-Fraunces";
+				font-family: var("--font-Fraunces");
 				font-variant: small-caps;
-				z-index:10;
-				margin:0;
-				text-shadow: #d2b5ff 3px 3px 5px;
+				z-index: 10;
+				margin: 0;
 			}
 
 			.menuPreview {
 				position:absolute;
-				top:20%;
+				top: 20%;
 				width: min(14rem, 30vw);
 				z-index:1;
-				transition: all 0.5s;
+				transition: all 0.5s cubic-bezier(0.42, 0, 0.45, 1.04);
 				text-align: center;
 				pointer-events: none;
-				left:-80%;
+				left: -80%;
 			}
 
 			.menuPreview.revealed {
@@ -191,8 +213,8 @@
 		</style>
 	</head>
 	<Base>
-		<div id="mainMenu" class="h-dvh overflow-hidden p-10 flex justify-between mb-15">
-			<ul id="mainList" class="flex-1">
+		<div id="mainMenu" class="h-dvh relative overflow-hidden p-10 flex justify-between mb-15">
+			<ul id="mainList" class="flex-1 mt-12">
 				<!-- TODO: Improve mobile experience -->
 				{menuDisplay.map((item) => (
 					<li class="relative h-[13vh] w-[50vw] items-center">
@@ -206,13 +228,11 @@
 					</li>
 				))}
 			</ul>
-			<div id="mainFiller" class="self-start w-[40vw] float-right sm:w-[30vw]">
+			<div class="self-start w-[40vw] float-right sm:w-[30vw] md:mr-10 lg:mr-30">
 
-				<h1 class="text-xl float-right sm:float-left sm:text-3xl inline">Alex Daly</h1>
-				<img src="/assets/index/flag.gif" class="w-10 h-auto inline ml-3 mr-5 float-right sm:mr-0 sm:float-left relative top-2">	
-				<p class="mt-2 max-w-prose max-sm:hidden block clear-both">Computing student @ NCI, building useful web apps and Minecraft tools, seeking a 6 month placement in Dublin starting Jan 2027</p>
-				<p class="mt-2 sm:hidden clear-both text-right">Computing student at NCI</p>
-				<img src="/assets/index/underConstruction.gif" class="ml-12 mt-5 w-15 h-auto max-sm:hidden sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
+				<h1 class="headerFont w-33 mb-2 text-3xl float-right sm:text-6xl sm:w-62 inline">Alex Daly</h1>
+				<p class="w-33 max-w-prose text-sm block clear-both float-right sm:w-62">Developer, Student, Reader</p>
+				<img src="/assets/index/underConstruction.gif" id="constructionGif" class="absolute bottom-6 right-4 mr-5 mt-5 w-30 h-auto sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
 			</div>
 		</div>
 	</Base>
