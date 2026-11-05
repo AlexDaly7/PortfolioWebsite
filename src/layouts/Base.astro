@@ -13,8 +13,16 @@
         <Font cssVariable="--font-OpenSans" preload />
         <Font cssVariable="--font-Recursive" preload />
         <Font cssVariable="--font-Roboto" preload />
+    
+        <style>
+            body {
+                background-color: #FAF9F6;
+                background-image: radial-gradient(#d6d1c7 1px, transparent 1px);
+	            background-size: 24px 24px;
+            }
+        </style>
     </head>
-        <body class="bg-indigo-900">
+        <body>
             <div class="min-h-screen">
                 <slot/>
             </div>

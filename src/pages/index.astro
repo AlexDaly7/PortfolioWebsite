@@ -53,8 +53,15 @@
 					const element = document.createElement("span");
 					element.classList.add("mainListChar");
 					element.appendChild(content);
-					element.style.transition="0.2s all";
+					element.style.transition="0.5s all";
 					element.style.display="inline-block";
+					element.ariaHidden = "true";
+					// Make the letters jump when hovered
+					element.addEventListener("mouseenter", () => {
+						if(item.preview.classList.contains("revealed")) {
+							element.dataset.bump = String(10);
+						}
+					});
 					item.fontArr[j] = j;
 
 					item.characters.push(element);
@@ -70,15 +77,15 @@
 
 					item.fontInterval = setInterval(() => {
 						changeFont(item);
-					}, 200);
+					}, 50);
 					
 					for(let j=0;j<item.characters.length;j++) {
 						if(item.timeoutEnter==undefined) return;
 
 						item.timeoutEnter[j] = setTimeout(() => {
-							item.characters[j].style.transform="translate(35vw)";
+							activateChar(item.characters[j]);
 							if(j==item.characters.length-1) {
-								item.preview.style.transform="translate(50vw)";
+								item.preview.classList.add("revealed");
 							}
 						}, j*70);
 					}
@@ -92,27 +99,67 @@
 						item.timeoutLeave[j] = setTimeout(() => {
 							resetChar(item.characters[j]);
 							if(j==item.characters.length-1) {
-								item.preview.style.transform="translate(0vw)";
+								item.preview.classList.remove("revealed");
 							}
 						}, (item.characters.length-j)*105);
 					}
 				});
 			}
 			
+			const gif = document.getElementById("constructionGif");
+			let rotation = 0;
+			let forward = true;
+			if(gif) {
+				setInterval(() => {
+					console.log("Interval...");
+					if(forward) rotation += 0.5
+					else rotation -= 0.5;
+
+					gif.style.transform = "rotate("+rotation+"deg)";
+
+					if(rotation>5) forward = false;
+					else if(rotation<-5) forward = true;
+				}, 50);
+			}
+			
+
 			function changeFont(item: mainMenuItem) {
 				for(let i=0;i<item.characters.length;i++) {
+					let char = item.characters[i];
+					let bump = parseFloat(char.dataset.bump ?? "0");
+
 					// Generate a random number with 1.7x the range of the fonts array. If it is over return the function
 					// This gives the font a chance not to change every tick of this function.
-					let random = Math.floor(Math.random()*(fonts.length*1.7));
-					if(random>=fonts.length) return;
+					let random = Math.floor(Math.random()*(fonts.length*50));
+					if(random<fonts.length&&bump<=1.5) {
+						char.style.fontFamily=fonts[random].toString();
+						bump += Math.random()*(fonts.length*0.5)+4;
+					} else {
+						bump = Math.max(0, bump - 0.8);
+					}
 
-					item.characters[i].style.fontFamily=fonts[random].toString();
+					char.dataset.bump = String(bump);
+					char.style.transform = "translateY(-"+(bump*10)+"px)";
+					if(bump!=0) {
+						char.style.textShadow = "rgba(0,0,0,0.2) 2px "+((bump*6.5)+2)+"px 3px";
+					} else {
+						char.style.textShadow = "";
+					}
+					
 				}
 			}
 
+			function activateChar(char: HTMLElement) {
+				char.style.translate="28vw";
+				char.style.opacity="75%";
+			}
+
 			function resetChar(char: HTMLElement) {
-				char.style.fontFamily = "Times New Roman";
-				char.style.transform = "translate(0rem)";
+				char.style.fontFamily = "var(--font-Fraunces)";
+				char.style.translate = "0";
+				char.style.opacity = "100%";
+				char.style.transform = "translateY(0)";
+				char.style.textShadow = "";
 			}
 
 			function clearTimeouts(item: mainMenuItem) {
@@ -138,48 +185,54 @@
 				transition: all 0.4s cubic-bezier(.38,-0.25,1,.74);
 				display:block;
 				z-index:10;
-				height:6vw;
 				position:relative;
+
 			}
 
 			.mainListLink {
-				font-family:"--font-Fraunces";
+				font-family: var("--font-Fraunces");
 				font-variant: small-caps;
-				z-index:10;
-				margin:0;
+				z-index: 10;
+				margin: 0;
 			}
 
 			.menuPreview {
+				position:absolute;
+				top: 20%;
+				width: min(14rem, 30vw);
 				z-index:1;
-				transition: all 0.5s;
+				transition: all 0.5s cubic-bezier(0.42, 0, 0.45, 1.04);
+				text-align: center;
+				pointer-events: none;
+				left: -80%;
 			}
 
-			body {
-				background: #2e80f2;
-				background: linear-gradient(238deg,rgba(46, 128, 242, 1) 0%, rgba(36, 116, 191, 1) 37%, rgba(11, 56, 153, 1) 74%, rgba(29, 32, 82, 1) 100%);	
+			.menuPreview.revealed {
+				left: 0%;
 			}
 		</style>
 	</head>
 	<Base>
-		<div id="mainMenu" class="h-dvh overflow-hidden p-10 flex justify-between mb-15">
-			<ul id="mainList">
+		<div id="mainMenu" class="h-dvh relative overflow-hidden p-10 flex justify-between mb-15">
+			<ul id="mainList" class="flex-1 mt-12">
 				<!-- TODO: Improve mobile experience -->
 				{menuDisplay.map((item) => (
-					<li>
-						<div class="menuPreview w-50 text-center relative top-10 right-[60vw] sm:top-15 sm:right-[55vw] md:right-[48vw] lg:top-25 lg:right-[50vw]" aria-hidden="true">
-							<p class="text-mist-100 text-center text-xs md:text-sm lg:text-md">{item.tag}</p>
-							<h4 class="text-xs md:text-lg lg:text-xl font-bold">{item.text}</h4>
+					<li class="relative h-[13vh] w-[50vw] items-center">
+						<div class="menuPreview" aria-hidden="true">
+							<p class="text-mist-700 text-[clamp(0.7rem,1.2vw,0.9rem)]">{item.tag}</p>
+							<h4 class="text-[clamp(0.9rem,1.8vw,1.4rem)] font-bold line-clamp-2">{item.text}</h4>
 						</div>
-						<a href={item.link} class="mainListItem">
-							<span class="mainListLink text-[8vw] sm:text-[6vw] md:text-[5vw]">{item.name}</span>
+						<a href={item.link} class="mainListItem" aria-label={item.name}>
+							<span class="mainListLink text-[8vw] sm:text-[6vw] md:text-[4vw]">{item.name}</span>
 						</a>
 					</li>
 				))}
 			</ul>
-			<div id="mainFiller" class="self-start w-[20vw] float-right">
-				<h1 class="text-4xl max-sm:text-right">Alex Daly</h1>
-				<p class="mt-2 max-w-prose max-sm:hidden">Computing student @ NCI, building useful web apps and Minecraft tools, seeking a 6 month placement in Dublin starting Jan 2027</p>
-				<img src="/assets/index/underConstruction.gif" class="ml-12 mt-5 w-15 h-auto sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
+			<div class="self-start w-[40vw] float-right sm:w-[30vw] md:mr-10 lg:mr-30">
+
+				<h1 class="headerFont w-33 mb-2 text-3xl float-right sm:text-6xl sm:w-62 inline">Alex Daly</h1>
+				<p class="w-33 max-w-prose text-sm block clear-both float-right sm:w-62">Developer, Student, Reader</p>
+				<img src="/assets/index/underConstruction.gif" id="constructionGif" class="absolute bottom-6 right-4 mr-5 mt-5 w-30 h-auto sm:ml-2 sm:w-25 md:ml-5 lg:w-35">
 			</div>
 		</div>
 	</Base>
