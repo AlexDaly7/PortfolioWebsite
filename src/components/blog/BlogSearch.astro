@@ -32,19 +32,53 @@
     });
 ---
 
-<div id="search">
+<div id="search" class="p-4 min-h-70 max-h-80 lightBg">
     <div id="filters">
-        <h3>Tags</h3>
-        <div id="tags">
+        <h3 class="text-lg border-b-2 w-11 text-center mb-2">Tags</h3>
+        <div id="tags" class="">
             
         </div>
     </div>
-    <button id="searchButton">Search</button>
-    <h2>Results</h2>
-    <div id="results">
+    <button id="searchButton" class="button p-1 text-lg rounded-md mt-4">Search</button>
+    <h2 class="border-b-2 w-17 text-xl mt-3 mb-1 text-center">Results</h2>
+    <div id="results" class="overflow-y-auto">
 
     </div>
 </div>
+
+<style>
+
+    :global(.tagBtn) {
+        padding: 5px;
+        text-align: center;
+        font-size: 0.9rem;
+        background-color: #e7e7e785;
+        transition: 0.2s transform;
+        border-radius: 10%;
+        transition: 0.5s all;
+        margin-right: 2px;
+        margin-bottom: 2px;
+    }
+
+    :global(.tagBtn:hover) {
+        transform: scale(1.05);
+        background-color: #e7e7e7;
+        box-shadow: #ccc7d6 2px 2px 3px;
+    }
+
+    :global(.addTag) {
+        
+    }
+
+    :global(.removeTag) {
+        background-color:#d1c7df;
+    }
+
+    :global(.searchResult) {
+        display:block;
+    }
+    
+</style>
 
 <script define:vars={{tags, posts}} lang="ts">
 
@@ -103,67 +137,21 @@
 
         while(list?.hasChildNodes()) list.removeChild(list.firstChild);
 
-        searchResults.forEach((result) => {
-            console.log("Adding result");
-            let element = document.createElement("a");
-            element.href = "/blog/"+result.data.slug;
-            element.appendChild(document.createTextNode(result.data.title));
+        if(searchResults.length!=0) {
+            searchResults.forEach((result) => {
+                console.log("Adding result");
+                let element = document.createElement("a");
+                element.href = "/blog/"+result.data.slug;
+                element.classList.add("searchResult");
+                element.appendChild(document.createTextNode(result.data.title));
+                list?.append(element);
+            });
+        } else {
+            let element = document.createElement("p");
+            element.appendChild(document.createTextNode("No blogs found..."));
             list?.append(element);
-        });
+        }
+        
     }
     
 </script>
-
-<style>
-    #search {
-        margin-left:1rem;
-        border:3px sandybrown ridge;
-        width: 25rem;
-        height:25rem;
-        padding:1rem;
-    }
-
-    :global(.tagBtn) {
-        font-size:0.9rem;
-        height: 1.5rem;
-        border-radius:0;
-        background-color:bisque;
-        transition:0.2s transform;
-    }
-
-    :global(.tagBtn:hover) {
-        transform: scale(1.01);
-        background-color:
-    }
-
-    :global(.addTag) {
-        
-    }
-
-    :global(.removeTag) {
-        background-color:burlywood;
-    }
-
-    #filters {
-        width:100%;
-        margin:auto;
-    }
-
-    #filters > h3 {
-        margin:0;
-        margin-top:1rem;
-    }
-
-    #tags {
-        height:5rem;
-        overflow-y: scroll;
-        border:black 1px solid;
-    }
-
-    #searchButton {
-        width:10rem;
-        height:2.5rem;
-        font-size:1.6rem;
-        margin:1rem;
-    }
-</style>
