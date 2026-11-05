@@ -65,5 +65,18 @@ export default defineConfig({
 				}],
 			},
 		},
+		{
+			provider: fontProviders.local(),
+			name: "Jakarta",
+			cssVariable: "--font-Jakarta",
+			options: {
+				variants: [{
+					src: ['./src/assets/fonts/JakartaSans.ttf'],
+					weight: 400,
+					style: 'normal',
+					display: 'swap',
+				}],
+			},
+		},
 	],
 });
